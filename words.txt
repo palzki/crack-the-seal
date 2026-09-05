@@ -31050,3 +31050,50 @@ Hell's Eye
 Vanguard Crest
 Vanguard Emblem
 Crystaras' Core
+Land's End
+Zaid
+Outside of Crude Dungeon
+Midstream of Mimir River
+Silon Forest
+Lime
+Outer Lines of Lime
+Herakus Forest
+Western Laywook Forest
+Eastern Laywook Forest
+Adel Monastery
+Upstream of Mimir River
+Madelin
+Trevia Valley
+Cross Forest
+Downstream of Glasis River
+Glasis Plains
+Upstream of Glasis River
+Elim
+Mt. Trevia
+Lake Cross
+Sevis
+Western Red Soil
+Eastern Red Soil
+Northern Poibus
+Sikara Valley
+Southern Poibus
+Sikara
+Blue Eye
+Mt. Cross
+Clement Mine
+Crude Dungeon
+Aleph Silon
+Forest of Death
+Catacombs
+Sealed Cave
+West of Sealed Island
+East of Sealed Island
+Dungeon Esdelron
+Nearis
+Dungeon of Death
+Esdelron Lake
+Ice Castle
+Candy Village
+Chocolate Forest
+Nua City
+Mt. Pionur Entrance
