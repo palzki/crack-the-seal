@@ -3554,7 +3554,6 @@ Hard Shell
 Magic Powder
 Vampire's Canine
 Mithril
-Rock
 Mark of Mage
 Mark of Vampire
 Yeast
@@ -3626,14 +3625,9 @@ Silly Piya
 Smart Piya
 Healthy Piya
 Extraordinary Piya
-Chicken
 Jester Piya
 Red Potion
-Mage Piya
-Cleric Piya
 Blue Potion
-Warrior Piya
-Knight Piya
 Hero Piya
 King of All Chicken
 Queen of All Chickens
@@ -4062,7 +4056,6 @@ Armor of Starlight(T)
 Lunar Shadow Armor(T)
 Armor of Daylight(T)
 Suit of Astraeus(T)
-Beanie
 Pretty Beanie
 Warrior Beanie
 Sun Flower
@@ -4077,7 +4070,6 @@ Baby Bat
 Blood-Sucking Bat
 Pig Bat
 Salamander
-Crow
 Pair of Love-Birds
 Brawlers Garb(T)
 Jester's Clothes(T)
@@ -4246,10 +4238,8 @@ Aesa's Wish
 Swordsman's Name
 Cordelia's Proof
 Militia Entrance Exam
-Crushed Flower
 Swordsman's License
 Orelhas de Golem
-a
 Albereo's Medicine
 Albereo's Prescription
 Wiping Out Ghosts
@@ -4322,13 +4312,10 @@ Mushroom10
 Stem of Radish30
 Log30
 Defeat Bale
-Pierre1
-Pierre2
 Lover from the Past
 Fed the Pig
 Pig Food
 Gigantic Piece of Rock
-Book of Adel
 Book of Adel (Read)
 Albereo's Maker
 Tirbing's Maker
@@ -4541,7 +4528,6 @@ Seaweed
 Oxygen
 Hydrogen
 Ash
-Bell
 Carbon
 Spore
 Bronze
@@ -7360,16 +7346,13 @@ Fly Dragon
 Fly Phoenix
 Gloomy Dragon
 Gloomy Phoenix
-Moo Moo the Great
 Beautiful Moo Moo
 [Influential] Warrior Moo Moo
 Huge Pumpkin Head
 Jurassic Mosquito in Amber
-Pumpisto
 French Beanie
 Beautiful Beanie
 [Influential] Warrior Beanie
-Solar
 White Rose
 Artist Piya
 Super Piya
@@ -7377,7 +7360,6 @@ Great Mage Piya
 Priest Piya
 Master Swordsman Piya
 General Piya
-Cranky Rooster
 Hot-Blooded Bat Boy
 Count Bat
 Lucky Pig Bat
@@ -7431,7 +7413,6 @@ Lava Stream Key
 Ore of Tree
 Pillar of Fire Pilgrimage
 Pillar of Water Pilgrimage
-Missing Sir. Alley Cat
 Broken Summon Stone
 Capturing Pet
 Time Travel Ticket
@@ -7463,8 +7444,6 @@ Legendary Mine
 Rusty Key
 Protect Flower Garden
 Sprayer
-Insecticide
-Solvent
 Strong Rib-Bone30
 Devil's Claw30
 Well Burnt Prime Coal30
@@ -7648,7 +7627,6 @@ Look for Ghost Knight
 Ghost Knight's Test
 Find Golden Hammer
 Transparent Cloak
-Crying Child
 Bring Milk
 Warm Milk
 Animal Friend
@@ -7774,7 +7752,6 @@ Lavish Tails.G
 Lavish Tails.DG
 Lavish Tails.XG
 Empty Quest
-Carnation
 Carnation Bouquet
 Cherry Blossom Petals
 Cherry Blossoms
@@ -11522,7 +11499,6 @@ Vroomy
 Flower Carriage Ring
 Elegant Flower Carriage Ring
 Fancy Flower Carriage Ring
-Pet Mixer
 Colored Pet Mixer
 Green Dumbknuckle
 Green Dumbknuckle.G
@@ -11660,7 +11636,6 @@ Big Bell
 Request from 3 piglet brothers 1
 Call from Iris
 Enter Militia
-Marco the Appraiser
 Ghost's Cry
 Call from Peterson
 4th step of Piya Elimination
@@ -11703,7 +11678,6 @@ Life of Darkness 2
 Wicked Soul 3
 Thief Cat
 Red Lipstick
-Computer Freak
 Sealed Island
 Farmer's Sickle
 Pheromone of Temptation
@@ -14892,7 +14866,6 @@ Black Carrot.XG
 Traces of Sandalpone
 Wood Element
 History of Shiltz - Non Sequentia
-Prophecy 12
 Memory Enhancer
 Meeting with Hanaiel
 Story of Dean
@@ -15577,7 +15550,6 @@ Bank Expansion Normal Ticket (7days)
 Bank Expansion Crystal Ticket
 Broken Blue Piece
 Broken Gray Piece
-Wounded Man
 Seed of Love
 Cracked Seed of Love
 Pink Rascal Rabbit Costume(H)
@@ -15597,7 +15569,6 @@ Pink Rascal Rabbit Costume(T).XG
 Pink Rascal Rabbit Costume(B).XG
 Pink Rascal Rabbit Costume(S).XG
 Pink Rascal Rabbit Backpack
-Golden Chest
 Golden Chest (opened)
 Golden Chest Key
 Fishing EXP (4 Hour)
@@ -16001,7 +15972,6 @@ Rascal Rabbit Bread
 Rascal Rabbit Bread.G
 Rascal Rabbit Bread.DG
 Rascal Rabbit Bread.XG
-Rascal Rabbit Fan
 Rascal Rabbit Fan.G
 Rascal Rabbit Fan.DG
 Rascal Rabbit Fan.XG
@@ -16033,13 +16003,7 @@ Partial Skill Reset
 [Untradeable] Marco's Mistake
 Golden Fish Hook (15 days)
 [Untradeable] Pet Appraiser's Mistake
-Light Spirit
-Dark Spirit
-Fire Spirit
-Water Spirit
-Tree Spirit
 Metal Spirit
-Earth Spirit
 Kuta Hat
 Kuta Top
 Kuta Bottom
@@ -16808,7 +16772,6 @@ Queen of Spirit Crystal
 Clue Search for Queen of Spirit
 Regarding spirits
 Bring Glass of Water
-To Clements Mine
 Bawling Baldea
 Stone Statue's Memories
 Statue's Cut Memories
@@ -18705,7 +18668,6 @@ Tree Fragment
 Tipareth's Gift (Bottom)
 Bring ???believer's luggage
 ???believer's luggage
-Q1
 Huge Mud Sentinel Polymorph Potion
 Macho Zombie Polymorph Potion
 Jikael Polymorph Potion
@@ -20044,11 +20006,8 @@ Iceman (Sword)
 Pig Warrior Doll
 Pig Warrior
 Anastasis Doll
-Anastasis
 Guardian of Pillar Doll
-Guardian of Pillar
 Ice Queen Doll
-Ice Queen
 Bloody Ice Queen
 Soup in the Cauldron
 Wings of Shrouded Bale
@@ -21289,7 +21248,6 @@ Black Dragon Egg
 Footed Black Dragon Egg
 Headed Black Dragon Egg
 Baby Black Dragon
-Black Dragon
 Fly Black Dragon
 Vintage Toro Costume
 Vintage Toro Costume.G
@@ -21941,29 +21899,18 @@ Young Mandragora
 Mandragora
 Fly Mandragora
 Vampire
-Olsen
-Dragon Keeper
 [Style] Bloody Ice Queen
-Tilrora
-Tilroa
 Monk Rabbit
-Cave Ogre
 Blue Ancient Dragon
 Golden Ancient Dragon
 Red Ancient Dragon
 Silver Ancient Dragon
 Black Ancient Dragon
-Nariel
-Ginger Cookie Man
-Sand Cookie Man
-Oreo Cookie Man
-Saber Cookie Man
 Blood Sucker Vampire 
 Miner Mole
 Oblivion Pagan
 Pagan
 Rymos
-Tipareth
 [Style] Ice Queen
 Soul Reaper Ingela
 Golden Dragon Egg
@@ -21978,7 +21925,6 @@ Crimson Phoenix
 Albino Phoenix
 Elegant Kitsune
 Mystic Kitsune
-Rascal Reaper
 Heroic Adorable Rex.GX
 Forsaken Ranael's Greatsword.XG
 Forsaken Ranael's Zweihander.XG
@@ -22531,7 +22477,6 @@ Rascal Rabbit Bag (15 Year Commemoration).XG
 [Mirage] Clock of Destiny
 Mirage Tower Reward Box
 Santa's Smelly Sock
-Santa's Gift Box
 Santa's Gift Box (Open)
 [Chef] Rage Soup
 [Chef] Flower Aroma Porridge
@@ -24300,9 +24245,6 @@ Forgotten King's Locked Silver Chest
 Forgotten King's Opened Silver Chest
 Forgotten King's Locked Gold Chest
 Forgotten King's Opened Gold Chest
-??? ??
-Fire Blackened Diary
-Torn Recruitment Notice
 Secretary Gilliman's Journal Chapter 1
 Secretary Gilliman's Journal Chapter 2
 Secretary Gilliman's Journal Chapter 3
@@ -24375,7 +24317,6 @@ Fairy Male Dryad
 Fairy Female Dryad
 Hot Blooded Detective Bat
 Raven
-Bubble Dragon
 Dr.Boo
 Crackle
 Together Forever
@@ -26221,7 +26162,6 @@ Shinobi Rogue Robe.XG
 Shinobi Captain Uniform.XG
 Shinobi Spy Robe.XG
 Shinobi Token
-Santa's Gift Bag
 Stolen Christmas Key
 Snow Globe
 Star from Christmas Tree
@@ -30233,7 +30173,6 @@ Tanning Oil
 Sandgater Leather
 Fragment of Boma's Letter
 Boma's Gunpowder Keg
-Lighthouse Patrol Journal
 Coskarka's Claw
 Mr. Grilled's Belly Fat
 Sandgater Tail
@@ -31057,7 +30996,7 @@ Midstream of Mimir River
 Silon Forest
 Lime
 Outer Lines of Lime
-Herakus Forest
+Herkaus Forest
 Western Laywook Forest
 Eastern Laywook Forest
 Adel Monastery
@@ -31078,10 +31017,8 @@ Northern Poibus
 Sikara Valley
 Southern Poibus
 Sikara
-Blue Eye
 Mt. Cross
 Clement Mine
-Crude Dungeon
 Aleph Silon
 Forest of Death
 Catacombs
@@ -31097,3 +31034,18 @@ Candy Village
 Chocolate Forest
 Nua City
 Mt. Pionur Entrance
+Laywook Forest West
+To End of Land
+Crude Mountain Range
+Outer Wall of Lime
+Laywook Forest East
+Upperstream of Mimir River
+Travia Valley
+Upperstream of Glasis River
+Travia Mountain
+Cross Lake
+West of Red Soil
+East of Red Soil
+South of Poibus
+North of Poibus
+Cross Mountain
