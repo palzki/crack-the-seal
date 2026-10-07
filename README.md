@@ -19,4 +19,4 @@ Then open `http://localhost:8000`.
 3. Under **Build and deployment**, choose **Deploy from a branch**.
 4. Select the branch and `/ (root)` folder, then save.
 
-The site uses only `index.html`, `app.js`, `styles.css`, and `words.txt`, so no build step is required.
+The site uses only `index.html`, `app.js`, `styles.css`, `words.txt` and the `fonts/` folder, so no build step is required.
