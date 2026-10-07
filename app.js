@@ -1,131 +1,254 @@
-const form = document.querySelector("#search-form");
+// Crack the Seal: the event master posts a name's letters in scrambled order
+// (like I-K-A-A-O-U-N-Q-M-K-A-G-Y). The answer is the name that uses exactly those letters.
+
 const tilesInput = document.querySelector("#tiles");
-const clearButton = document.querySelector("#clear-button");
-const status = document.querySelector("#status");
-const results = document.querySelector("#results");
-const resultCount = document.querySelector("#result-count");
+const clearButton = document.querySelector("#clear");
+const source = document.querySelector("#source");
+const read = document.querySelector("#read");
+const readCount = document.querySelector("#read-count");
+const readTiles = document.querySelector("#read-tiles");
+const stage = document.querySelector("#stage");
+const close = document.querySelector("#close");
 
-let words = [];
+const A = 97;
+let entries = null; // [{ name, counts: Uint8Array(26), length, key }]
+let byKey = new Map(); // sorted letters -> entries using exactly those letters
+let loadFailed = false;
+let copiedName = "";
 
-function letterCounts(value) {
-  const counts = new Map();
-  for (const letter of value.toLowerCase()) {
-    counts.set(letter, (counts.get(letter) || 0) + 1);
-  }
+function lettersOf(value) {
+  return value.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+function countLetters(letters) {
+  const counts = new Uint8Array(26);
+  for (let index = 0; index < letters.length; index += 1) counts[letters.charCodeAt(index) - A] += 1;
   return counts;
 }
 
-function cleanLetters(value) {
-  return [...value.toLowerCase()].filter((character) => /[a-z]/.test(character));
+function sortedKey(letters) {
+  return [...letters].sort().join("");
 }
 
-function findMatches(input) {
-  const requiredLetters = cleanLetters(input);
-  const requiredCounts = letterCounts(requiredLetters.join(""));
-  const requiredLength = requiredLetters.length;
-
-  return words
-    .map((word) => {
-      const wordLetters = cleanLetters(word);
-      const wordCounts = letterCounts(wordLetters.join(""));
-      const containsTiles = [...requiredCounts].every(
-        ([letter, count]) => (wordCounts.get(letter) || 0) >= count
-      );
-
-      return containsTiles ? { word, extraLetters: wordLetters.length - requiredLength } : null;
-    })
-    .filter(Boolean)
-    .sort((first, second) => first.extraLetters - second.extraLetters || first.word.localeCompare(second.word));
-}
-
-function renderMatches(matches, input) {
-  const bestMatches = matches.filter((match) => match.extraLetters === 0);
-  const visibleMatches = (bestMatches.length ? bestMatches : matches).slice(0, 5);
-  resultCount.textContent = visibleMatches.length ? `${visibleMatches.length} shown` : "";
-
-  if (!visibleMatches.length) {
-    results.innerHTML = `
-      <div class="empty-state">
-        <span class="empty-mark" aria-hidden="true">0</span>
-        <p>No matches for <strong>${input.toUpperCase()}</strong>. Try a different set of tiles.</p>
-      </div>`;
-    return;
+function prepare(text) {
+  const seen = new Set();
+  const list = [];
+  for (const raw of text.split(/\r?\n/)) {
+    const name = raw.trim();
+    const letters = lettersOf(name);
+    // Skip blank lines, names whose original characters were lost ("??? Church"), and repeats.
+    if (!letters || name.includes("??") || seen.has(name.toLowerCase())) continue;
+    seen.add(name.toLowerCase());
+    list.push({ name, counts: countLetters(letters), length: letters.length, key: sortedKey(letters) });
   }
-
-  results.innerHTML = visibleMatches.map(({ word, extraLetters }, index) => `
-    <button class="result-card" type="button" data-copy-word="${word.replaceAll('"', '&quot;')}" aria-label="Copy ${word}">
-      <span class="result-number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
-      <span class="result-word">${word}</span>
-      <span class="result-detail">${extraLetters ? `+${extraLetters} extra` : "Copy"}</span>
-    </button>`).join("");
+  return list;
 }
 
-async function copyWord(word, resultButton) {
+// Names that contain every letter, closest first. Extra letters are the ones the event master didn't give.
+function closest(counts, length, exclude, limit) {
+  const found = [];
+  outer: for (const entry of entries) {
+    if (entry.length < length || exclude.has(entry)) continue;
+    for (let letter = 0; letter < 26; letter += 1) if (entry.counts[letter] < counts[letter]) continue outer;
+    found.push(entry);
+  }
+  found.sort((left, right) => left.length - right.length || left.name.length - right.name.length || left.name.localeCompare(right.name));
+  return { total: found.length, shown: found.slice(0, limit) };
+}
+
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function note(text) {
+  return element("p", "note", text);
+}
+
+async function copy(name) {
   try {
-    await navigator.clipboard.writeText(word);
+    await navigator.clipboard.writeText(name);
   } catch {
-    const copyInput = document.createElement("textarea");
-    copyInput.value = word;
-    document.body.append(copyInput);
-    copyInput.select();
+    const fallback = document.createElement("textarea");
+    fallback.value = name;
+    fallback.style.position = "fixed";
+    fallback.style.opacity = "0";
+    document.body.append(fallback);
+    fallback.select();
     document.execCommand("copy");
-    copyInput.remove();
+    fallback.remove();
   }
-
-  resultButton.classList.add("is-copied");
-  resultButton.querySelector(".result-detail").textContent = "Copied";
-  status.textContent = `Copied ${word} to your clipboard.`;
+  copiedName = name;
+  render();
   setTimeout(() => {
-    resultButton.classList.remove("is-copied");
-    resultButton.querySelector(".result-detail").textContent = "Copy";
+    if (copiedName === name) {
+      copiedName = "";
+      render();
+    }
   }, 1400);
 }
 
-function search(input) {
-  const cleanInput = cleanLetters(input).join("");
-  if (!cleanInput) {
-    status.textContent = "Enter at least one letter to search.";
-    resultCount.textContent = "";
-    results.innerHTML = `
-      <div class="empty-state">
-        <span class="empty-mark" aria-hidden="true">?</span>
-        <p>Type a few letters to reveal possible matches.</p>
-      </div>`;
-    return;
+// Which letters of a name are extra (not given by the event master). Tags like "[Lv.69]" usually sit
+// at the start and suffixes like "'s Letter" at the end, so try matching from both ends and keep the
+// version where the extra letters form the fewest separate runs.
+function extraMask(name, counts, fromEnd) {
+  const remaining = Uint8Array.from(counts);
+  const characters = [...name];
+  const mask = new Array(characters.length).fill(false);
+  const order = characters.map((_, index) => index);
+  if (fromEnd) order.reverse();
+  for (const index of order) {
+    const code = characters[index].toLowerCase().charCodeAt(0) - A;
+    if (code < 0 || code >= 26) continue;
+    if (remaining[code] > 0) remaining[code] -= 1;
+    else mask[index] = true;
   }
-
-  const matches = findMatches(cleanInput);
-  status.textContent = `${matches.length} ${matches.length === 1 ? "match" : "matches"} found for ${cleanInput.toUpperCase()}.`;
-  renderMatches(matches, cleanInput);
+  return mask;
 }
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  search(tilesInput.value);
-});
+function runs(name, mask) {
+  let count = 0;
+  let previous = false;
+  [...name].forEach((character, index) => {
+    if (!/[a-z]/i.test(character)) return;
+    if (mask[index] && !previous) count += 1;
+    previous = mask[index];
+  });
+  return count;
+}
 
+function markedName(name, counts) {
+  const forward = extraMask(name, counts, false);
+  const backward = extraMask(name, counts, true);
+  const mask = runs(name, backward) < runs(name, forward) ? backward : forward;
+  const wrap = element("span", "marked");
+  [...name].forEach((character, index) => {
+    if (mask[index]) wrap.append(element("span", "extra", character));
+    else if (/[a-z]/i.test(character) || character === " ") wrap.append(character);
+    else wrap.append(element("span", "punct", character));
+  });
+  return wrap;
+}
+
+function renderRead(letters) {
+  read.hidden = !letters;
+  readTiles.replaceChildren(...[...letters].map((letter) => element("span", "tile", letter.toUpperCase())));
+  readCount.textContent = `${letters.length} ${letters.length === 1 ? "letter" : "letters"}`;
+}
+
+function renderStage(letters, exact, near) {
+  if (loadFailed) return stage.replaceChildren(note("The name list couldn’t be loaded. Reload the page to try again."));
+  if (!entries) return stage.replaceChildren(note("Loading Seal Online names…"));
+  if (!letters) return stage.replaceChildren(note("Paste the letters from the event master, like I-K-A-A-O-U-N-Q-M-K-A-G-Y. Dashes and spaces are fine."));
+  if (!exact.length && !near.total) {
+    return stage.replaceChildren(note(`No name contains all of these ${letters.length} letters. Check for a typo, or try fewer letters.`));
+  }
+  if (!exact.length) {
+    return stage.replaceChildren(note(`No name uses exactly these ${letters.length} letters. The closest names are below — check that every letter was copied.`));
+  }
+
+  const solved = element("div", "solved");
+  const multiple = exact.length > 1;
+  for (const entry of exact) {
+    const row = element("div", "solved-row");
+    const name = element("button", `solved-name${entry.name.length > 16 ? " is-long" : ""}${multiple ? " is-multiple" : ""}`, entry.name);
+    name.type = "button";
+    name.setAttribute("aria-label", `Copy ${entry.name}`);
+    name.addEventListener("click", () => copy(entry.name));
+    row.append(name);
+    if (multiple) {
+      const button = element("button", "copy", copiedName === entry.name ? "Copied" : "Copy");
+      button.type = "button";
+      button.addEventListener("click", () => copy(entry.name));
+      row.append(button);
+    }
+    solved.append(row);
+  }
+  solved.append(element("p", "why", multiple
+    ? `${exact.length} names use exactly these ${letters.length} letters.`
+    : `Uses exactly these ${letters.length} letters.`));
+  if (!multiple) {
+    const button = element("button", "copy", copiedName === exact[0].name ? "Copied" : "Copy answer");
+    button.type = "button";
+    button.addEventListener("click", () => copy(exact[0].name));
+    solved.append(button);
+  }
+  stage.replaceChildren(solved);
+}
+
+function renderClose(letters, counts, exact, near) {
+  if (!near.total) {
+    close.hidden = true;
+    close.replaceChildren();
+    return;
+  }
+  const { total, shown } = near;
+  close.hidden = false;
+  const heading = element("h2", "", exact.length ? "Close matches" : "Closest names");
+  heading.append(element("span", "close-count", String(total)));
+  const list = element("ul", "close-list");
+  for (const entry of shown) {
+    const button = element("button", "close-name");
+    button.type = "button";
+    button.title = `Copy ${entry.name}`;
+    button.append(markedName(entry.name, counts));
+    const extra = entry.length - letters.length;
+    button.append(element("span", "close-extra", copiedName === entry.name ? "copied" : `+${extra} extra`));
+    button.addEventListener("click", () => copy(entry.name));
+    const item = element("li");
+    item.append(button);
+    list.append(item);
+  }
+  const parts = [heading, list];
+  if (total > shown.length) parts.push(element("p", "close-more", `And ${total - shown.length} more with extra letters.`));
+  close.replaceChildren(...parts);
+}
+
+function render() {
+  const letters = lettersOf(tilesInput.value);
+  const counts = countLetters(letters);
+  const exact = entries && letters ? byKey.get(sortedKey(letters)) ?? [] : [];
+  clearButton.disabled = !tilesInput.value;
+  renderRead(letters);
+  const near = entries && letters ? closest(counts, letters.length, new Set(exact), exact.length ? 5 : 12) : { total: 0, shown: [] };
+  renderStage(letters, exact, near);
+  renderClose(letters, counts, exact, near);
+}
+
+document.querySelector("#form").addEventListener("submit", (event) => event.preventDefault());
+tilesInput.addEventListener("input", () => {
+  copiedName = "";
+  render();
+});
 clearButton.addEventListener("click", () => {
   tilesInput.value = "";
-  search("");
+  copiedName = "";
+  render();
   tilesInput.focus();
 });
 
-tilesInput.addEventListener("input", () => search(tilesInput.value));
-
-results.addEventListener("click", (event) => {
-  const resultButton = event.target.closest("[data-copy-word]");
-  if (resultButton) copyWord(resultButton.dataset.copyWord, resultButton);
-});
+render();
 
 fetch("words.txt")
   .then((response) => {
-    if (!response.ok) throw new Error("Word list could not be loaded.");
+    if (!response.ok) throw new Error(`words.txt returned ${response.status}`);
     return response.text();
   })
   .then((text) => {
-    words = text.split(/\r?\n/).map((word) => word.trim()).filter(Boolean);
-    status.textContent = `${words.length} entries ready. Enter your tiles to begin.`;
+    entries = prepare(text);
+    byKey = new Map();
+    for (const entry of entries) {
+      const group = byKey.get(entry.key);
+      if (group) group.push(entry);
+      else byKey.set(entry.key, [entry]);
+    }
+    source.textContent = `Searching ${entries.length.toLocaleString("en-US")} Seal Online names`;
+    render();
   })
   .catch(() => {
-    status.textContent = "The word list could not be loaded. Check that words.txt is published.";
+    loadFailed = true;
+    source.textContent = "Name list unavailable";
+    render();
   });
