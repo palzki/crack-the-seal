@@ -1,75 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* Same chalkboard as the Hangman helper. TeX Gyre Schola (Century Schoolbook) is bundled under the GUST Font License: see fonts/. */
+@font-face { font-family: "Schola"; src: url("fonts/schola-regular.woff") format("woff"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Schola"; src: url("fonts/schola-bold.woff") format("woff"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Schola"; src: url("fonts/schola-italic.woff") format("woff"); font-weight: 400; font-style: italic; font-display: swap; }
 
 :root {
-  --ink: #eef1e9;
-  --muted: #9aa89d;
-  --paper: #101613;
-  --panel: #18211c;
-  --line: #34443a;
-  --accent: #e75a3d;
-  --accent-dark: #ff896f;
-  --mint: #24392e;
-  --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+  --board: #233029;
+  --well: #1a241f;
+  --chalk: #ece8dc;
+  --chalk-soft: #a9b2a8;
+  --chalk-faint: #6f7c73;
+  --line: #3a4a41;
+  --yellow: #f2d064;
+  color-scheme: dark;
+  font: 17px/1.5 "Schola", "Century Schoolbook", Georgia, serif;
+  color: var(--chalk);
+  background: var(--board);
+  -webkit-font-smoothing: antialiased;
 }
 
 * { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: var(--board) radial-gradient(ellipse 80% 50% at 35% 0%, rgba(236, 232, 220, .045), transparent); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--ink);
-  background: var(--paper);
-  font-family: "Space Grotesk", sans-serif;
-  background-image: radial-gradient(circle at 88% 10%, rgba(231, 90, 61, 0.2) 0 1px, transparent 1.5px), radial-gradient(circle at 10% 92%, rgba(86, 151, 111, 0.2) 0 1px, transparent 1.5px);
-  background-size: 24px 24px, 31px 31px;
-}
+.page { max-width: 880px; margin: 0 auto; padding: 28px 40px 40px; }
 
-.shell { width: min(100% - 40px, 760px); margin: 0 auto; padding: 80px 0 36px; }
+.masthead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 32px; }
+.masthead h1 { margin: 0; font-size: 24px; font-weight: 700; font-style: italic; letter-spacing: -.01em; }
+.source { margin: 0; color: var(--chalk-soft); font-size: 15px; }
 
-.intro { animation: rise 500ms ease-out both; }
-.eyebrow { margin: 0 0 13px; color: var(--accent-dark); font: 500 12px/1 "DM Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-h1 { max-width: 600px; margin: 0; font-size: clamp(3.3rem, 10vw, 6.9rem); line-height: 0.88; letter-spacing: -0.07em; }
-.lede { max-width: 420px; margin: 28px 0 48px; color: var(--muted); font-size: 1.1rem; line-height: 1.55; }
+/* Input */
+.inputs { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 16px; margin-top: 32px; }
+.field label { display: block; margin-bottom: 6px; color: var(--chalk-soft); font-size: 15px; }
+.field input { width: 100%; height: 56px; padding: 0 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--well); font-size: 22px; letter-spacing: .06em; outline: none; }
+.field input::placeholder { color: var(--chalk-faint); letter-spacing: .02em; }
+.field input:focus { border-color: var(--yellow); box-shadow: 0 0 0 1px var(--yellow); }
+.clear { height: 56px; padding: 0 20px; border: 1px solid var(--line); border-radius: 8px; background: none; color: var(--chalk-soft); }
+.clear:hover:not(:disabled) { color: var(--chalk); border-color: var(--chalk-soft); }
+.clear:disabled { opacity: .4; cursor: default; }
 
-.solver-panel { padding: 28px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); animation: rise 500ms 90ms ease-out both; }
-label { display: block; margin-bottom: 10px; font: 500 12px/1 "DM Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; }
-.input-row { display: flex; gap: 10px; }
-input { width: 100%; min-width: 0; padding: 15px 16px; color: var(--ink); background: #111a15; border: 1px solid var(--line); border-radius: 0; outline: 0; font: 500 1.1rem "DM Mono", monospace; transition: border-color 150ms, box-shadow 150ms; }
-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231, 90, 61, 0.15); }
-button { border: 0; border-radius: 0; cursor: pointer; font: 600 0.95rem "Space Grotesk", sans-serif; }
-.input-row button { padding: 0 25px; color: #fffaf2; background: var(--accent); transition: background 150ms, transform 150ms; }
-.input-row button:hover { background: var(--accent-dark); transform: translateY(-1px); }
-.form-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 31px; }
-.form-meta p { margin: 13px 0 0; color: var(--muted); font: 12px "DM Mono", monospace; }
-.clear-button { margin-top: 13px; padding: 3px 0; color: var(--accent-dark); background: transparent; font-size: 12px; }
-.clear-button:hover { text-decoration: underline; }
+/* The letters as read, so a missed or extra letter is easy to spot */
+.read { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin-top: 16px; }
+.read-count { color: var(--chalk-soft); font-size: 15px; white-space: nowrap; }
+.read-tiles { display: flex; flex-wrap: wrap; gap: 5px; }
+.tile { display: grid; place-items: end center; width: 1.15em; height: 1.4em; border-bottom: 2px solid var(--chalk-faint); font-size: 20px; font-weight: 700; line-height: 1.1; }
 
-.results-section { margin-top: 58px; animation: rise 500ms 170ms ease-out both; }
-.section-heading { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); }
-h2 { margin: 0 0 12px; font-size: 1.25rem; }
-.result-count { color: var(--muted); font: 12px "DM Mono", monospace; }
-.results { display: grid; gap: 9px; padding-top: 14px; }
-.result-card { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; width: 100%; min-height: 64px; padding: 12px 15px; color: var(--ink); background: var(--mint); text-align: left; animation: reveal 280ms ease-out both; transition: background 150ms, transform 150ms; }
-.result-card:hover, .result-card:focus-visible { background: #31513e; outline: 0; transform: translateX(4px); }
-.result-card:focus-visible { box-shadow: 0 0 0 3px rgba(231, 90, 61, 0.25); }
-.result-card.is-copied { background: #68452e; }
-.result-number { color: var(--accent-dark); font: 12px "DM Mono", monospace; }
-.result-word { font-size: 1.25rem; font-weight: 600; }
-.result-detail { color: var(--muted); font: 11px "DM Mono", monospace; text-transform: uppercase; }
-.empty-state { display: grid; justify-items: center; gap: 9px; padding: 44px 20px; color: var(--muted); text-align: center; border: 1px dashed var(--line); }
-.empty-state p { margin: 0; font-size: 0.95rem; }
-.empty-mark { display: grid; place-items: center; width: 35px; height: 35px; color: var(--accent-dark); border: 1px solid var(--accent); font: 500 15px "DM Mono", monospace; }
-footer { margin-top: 65px; color: var(--muted); font: 11px "DM Mono", monospace; text-align: center; }
+/* The answer */
+.stage { display: flex; align-items: center; min-height: 210px; margin-top: 20px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+.note { max-width: 50ch; margin: 0; color: var(--chalk-soft); font-size: 19px; }
+.solved { width: 100%; }
+.solved-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; }
+.solved-row + .solved-row { margin-top: 10px; }
+.solved-name { display: block; max-width: 100%; padding: 0; border: 0; background: none; color: var(--yellow); font-size: 72px; font-weight: 700; line-height: 1.02; text-align: left; overflow-wrap: anywhere; text-shadow: 0 0 1.5px rgba(242, 208, 100, .55); animation: chalk-in .32s ease-out; }
+.solved-name.is-long { font-size: 52px; }
+.solved-name.is-multiple { font-size: 40px; }
+.why { margin: 10px 0 16px; color: var(--chalk-soft); }
+.copy { padding: 9px 18px; border: 0; border-radius: 6px; background: var(--yellow); color: var(--board); font-weight: 700; }
+.copy:hover { background: #f7dd88; }
+.solved-row .copy { padding: 6px 14px; }
 
-@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes reveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+/* Close matches */
+.close { margin-top: 36px; }
+.close h2 { margin: 0 0 8px; font-size: 21px; }
+.close-count { margin-left: 8px; color: var(--chalk-faint); font-weight: 400; }
+.close-list { margin: 0; padding: 0; list-style: none; }
+.close-name { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; width: 100%; padding: 10px 0; border: 0; border-bottom: 1px solid var(--line); background: none; font-size: 19px; text-align: left; }
+.close-name:hover { border-bottom-color: var(--chalk-soft); }
+.marked { min-width: 0; overflow-wrap: anywhere; }
+.marked .extra { color: var(--chalk-faint); }
+.marked .punct { color: var(--chalk-soft); }
+.close-extra { flex: none; color: var(--chalk-soft); font-size: 15px; }
+.close-more { margin: 12px 0 0; color: var(--chalk-soft); font-size: 15px; }
+.close .note { font-size: 17px; }
 
-@media (max-width: 560px) {
-  .shell { width: min(100% - 28px, 760px); padding-top: 54px; }
-  .lede { margin-bottom: 34px; }
-  .solver-panel { padding: 18px; }
-  .input-row { flex-direction: column; }
-  .input-row button { min-height: 48px; }
-  .result-card { grid-template-columns: 28px 1fr; }
-  .result-detail { grid-column: 2; }
+.footer { margin-top: 56px; color: var(--chalk-faint); font-size: 14px; }
+
+@keyframes chalk-in { from { opacity: 0; transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .solved-name { animation: none; } }
+
+@media (max-width: 760px) {
+  .page { padding: 20px 16px 32px; }
+  .masthead { display: block; }
+  .source { margin-top: 2px; }
+  .inputs { gap: 12px; margin-top: 20px; }
+  .tile { font-size: 17px; }
+  .stage { min-height: 0; padding: 22px 0; }
+  .solved-name { font-size: 48px; }
+  .solved-name.is-long { font-size: 34px; }
+  .solved-name.is-multiple { font-size: 30px; }
+  .close-name { font-size: 17px; }
 }
