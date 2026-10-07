@@ -1,0 +1,94 @@
+/* Same chalkboard as the Hangman helper. TeX Gyre Schola (Century Schoolbook) is bundled under the GUST Font License: see fonts/. */
+@font-face { font-family: "Schola"; src: url("fonts/schola-regular.woff") format("woff"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Schola"; src: url("fonts/schola-bold.woff") format("woff"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Schola"; src: url("fonts/schola-italic.woff") format("woff"); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --board: #233029;
+  --well: #1a241f;
+  --chalk: #ece8dc;
+  --chalk-soft: #a9b2a8;
+  --chalk-faint: #6f7c73;
+  --line: #3a4a41;
+  --yellow: #f2d064;
+  color-scheme: dark;
+  font: 17px/1.5 "Schola", "Century Schoolbook", Georgia, serif;
+  color: var(--chalk);
+  background: var(--board);
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: var(--board) radial-gradient(ellipse 80% 50% at 35% 0%, rgba(236, 232, 220, .045), transparent); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+.page { max-width: 880px; margin: 0 auto; padding: 28px 40px 40px; }
+
+.masthead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 32px; }
+.masthead h1 { margin: 0; font-size: 24px; font-weight: 700; font-style: italic; letter-spacing: -.01em; }
+.source { margin: 0; color: var(--chalk-soft); font-size: 15px; }
+
+/* Input */
+.inputs { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 16px; margin-top: 32px; }
+.field label { display: block; margin-bottom: 6px; color: var(--chalk-soft); font-size: 15px; }
+.field input { width: 100%; height: 56px; padding: 0 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--well); font-size: 22px; letter-spacing: .06em; outline: none; }
+.field input::placeholder { color: var(--chalk-faint); letter-spacing: .02em; }
+.field input:focus { border-color: var(--yellow); box-shadow: 0 0 0 1px var(--yellow); }
+.clear { height: 56px; padding: 0 20px; border: 1px solid var(--line); border-radius: 8px; background: none; color: var(--chalk-soft); }
+.clear:hover:not(:disabled) { color: var(--chalk); border-color: var(--chalk-soft); }
+.clear:disabled { opacity: .4; cursor: default; }
+
+/* The letters as read, so a missed or extra letter is easy to spot */
+.read { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin-top: 16px; }
+.read-count { color: var(--chalk-soft); font-size: 15px; white-space: nowrap; }
+.read-tiles { display: flex; flex-wrap: wrap; gap: 5px; }
+.tile { display: grid; place-items: end center; width: 1.15em; height: 1.4em; border-bottom: 2px solid var(--chalk-faint); font-size: 20px; font-weight: 700; line-height: 1.1; }
+
+/* The answer */
+.stage { display: flex; align-items: center; min-height: 210px; margin-top: 20px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+.note { max-width: 50ch; margin: 0; color: var(--chalk-soft); font-size: 19px; }
+.solved { width: 100%; }
+.solved-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; }
+.solved-row + .solved-row { margin-top: 10px; }
+.solved-name { display: block; max-width: 100%; padding: 0; border: 0; background: none; color: var(--yellow); font-size: 72px; font-weight: 700; line-height: 1.02; text-align: left; overflow-wrap: anywhere; text-shadow: 0 0 1.5px rgba(242, 208, 100, .55); animation: chalk-in .32s ease-out; }
+.solved-name.is-long { font-size: 52px; }
+.solved-name.is-multiple { font-size: 40px; }
+.why { margin: 10px 0 16px; color: var(--chalk-soft); }
+.copy { padding: 9px 18px; border: 0; border-radius: 6px; background: var(--yellow); color: var(--board); font-weight: 700; }
+.copy:hover { background: #f7dd88; }
+.solved-row .copy { padding: 6px 14px; }
+
+/* Close matches */
+.close { margin-top: 36px; }
+.close h2 { margin: 0 0 8px; font-size: 21px; }
+.close-count { margin-left: 8px; color: var(--chalk-faint); font-weight: 400; }
+.close-list { margin: 0; padding: 0; list-style: none; }
+.close-name { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; width: 100%; padding: 10px 0; border: 0; border-bottom: 1px solid var(--line); background: none; font-size: 19px; text-align: left; }
+.close-name:hover { border-bottom-color: var(--chalk-soft); }
+.marked { min-width: 0; overflow-wrap: anywhere; }
+.marked .extra { color: var(--chalk-faint); }
+.marked .punct { color: var(--chalk-soft); }
+.close-extra { flex: none; color: var(--chalk-soft); font-size: 15px; }
+.close-more { margin: 12px 0 0; color: var(--chalk-soft); font-size: 15px; }
+.close .note { font-size: 17px; }
+
+.footer { margin-top: 56px; color: var(--chalk-faint); font-size: 14px; }
+
+@keyframes chalk-in { from { opacity: 0; transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .solved-name { animation: none; } }
+
+@media (max-width: 760px) {
+  .page { padding: 20px 16px 32px; }
+  .masthead { display: block; }
+  .source { margin-top: 2px; }
+  .inputs { gap: 12px; margin-top: 20px; }
+  .tile { font-size: 17px; }
+  .stage { min-height: 0; padding: 22px 0; }
+  .solved-name { font-size: 48px; }
+  .solved-name.is-long { font-size: 34px; }
+  .solved-name.is-multiple { font-size: 30px; }
+  .close-name { font-size: 17px; }
+}
